@@ -1,0 +1,74 @@
+version: "3.8"
+services:
+  server:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+        - "8080:8080"
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: typegraph
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./src:/app/src
+#      - /app/node_modules
+    networks:
+        - backend
+  db:
+    image: mongo
+    ports:
+        - "27017:27017"
+    restart: always
+    environment:
+      MONGODB_HOST: db
+      MONGODB_PORT: 27017
+      MONGODB_USER: mongo
+      MONGODB_PASSWORD: mongo
+      MONGODB_NAME: typegraph
+      MONGODB_REPLICASET: rs0
+    volumes:
+        - ./data/db:/data/db
+    networks:
+        - backend
+
+#  mongo-express:
+#    image: mongo-express
+#    ports:
+#        - "8081:8081"
+#    restart: always
+#    environment:
+#      MONGODB_HOST: db
+#      MONGODB_PORT: 27017
+#      MONGODB_USER: mongo
+#      MONGODB_PASSWORD: mongo
+#      MONGODB_NAME: typegraph
+#      MONGODB_REPLICASET: rs0
+#    volumes:
+#        - ./data/mongo-express:/data/mongo-express
+#    networks:
+#        - backend
+  redis:
+    image: redis:5.0.3-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+        - ./data/db:/data/db
+#    environment:
+#        - REDIS_PASSWORD=redis
+    restart: always
+    networks:
+      - backend
+networks:
+    backend:
+        external: false
+        name: backend
+        driver: bridge
