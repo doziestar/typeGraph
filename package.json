@@ -7,7 +7,6 @@
   "author": "doziestar <chidosiky2015@gmail.com>",
   "license": "MIT",
   "private": false,
-  "type": "module",
   "scripts": {
     "start": "nodemon src/server.ts",
     "build": "tsc",
