@@ -4,12 +4,9 @@ import config from "config";
 
 dotenv.config()
 
-console.log(process.env.mongoURI);
-console.log(config.get('mongoURI'))
-
 export async function connect() {
     try {
-        await mongoose.connect(process.env.mongURI)
+        await mongoose.connect(`mongodb://${config.get("DB_HOST")}:${config.get("DB_PORT")}/${config.get("DB_NAME")}`);
         console.log("MongoDB connected");
     } catch (err) {
         console.log(err);

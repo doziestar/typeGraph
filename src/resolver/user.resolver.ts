@@ -25,7 +25,13 @@ export default class UserResolver {
 
     @Query((type) => User)
     me() {
-        return this.userService.getUser("1");
+        // return this.userService.getUser("1");
+        return {
+            password: "346644",
+            _id: "1",
+            name: "John Doe",
+            email: "dozie@gmail.com"
+        }
     }
 
     @Query((type) => [User])
